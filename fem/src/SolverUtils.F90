@@ -10845,17 +10845,28 @@ END FUNCTION SearchNodeL
           Solver % Variable % EigenValues,       &
           Solver % Variable % EigenVectors, Solver )
       
+      NormalizeToUnity = ListGetLogical( Solver % Values, &
+          'Eigen System Normalize To Unity',Stat)         
+
+      ! If not normalizing to unity perform normalization before back scaling
+      IF( .NOT. NormalizeToUnity ) THEN
+        CALL ScaleEigenVectors( A, Solver % Variable % EigenVectors, &
+            SIZE(Solver % Variable % EigenValues), A % NumberOfRows, &
+            NormalizeToUnity ) 
+      END IF
+        
       IF ( ScaleSystem ) CALL BackScaleLinearSystem( Solver, A, EigenScaling = .TRUE. ) 
       IF ( BackRotation ) CALL BackRotateNTSystem( x, Solver % Variable % Perm, DOFs )
 
       Norm = ComputeNorm(Solver,n,x)
       Solver % Variable % Norm = Norm
 
-      NormalizeToUnity = ListGetLogical( Solver % Values, &
-          'Eigen System Normalize To Unity',Stat)         
-      CALL ScaleEigenVectors( A, Solver % Variable % EigenVectors, &
-          SIZE(Solver % Variable % EigenValues), A % NumberOfRows, &
-          NormalizeToUnity ) 
+      ! If normalizing to unity perform normalization so that the final vectors are normalized 
+      IF( NormalizeToUnity ) THEN
+        CALL ScaleEigenVectors( A, Solver % Variable % EigenVectors, &
+            SIZE(Solver % Variable % EigenValues), A % NumberOfRows, &
+            NormalizeToUnity )
+      END IF
       
       CALL InvalidateVariable( CurrentModel % Meshes, Solver % Mesh, &
           Solver % Variable % Name )

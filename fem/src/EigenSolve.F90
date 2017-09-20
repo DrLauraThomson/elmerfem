@@ -610,7 +610,7 @@ CONTAINS
       ! (probably already done, but no harm in redoing!)
       ! Optionally normalize such that the maximum amplitude is set one.
       ! -----------------------------------------------------------------------------
-      
+            
       DO i = 1, NoEigen
 
         IF(  Matrix % COMPLEX ) THEN
@@ -639,7 +639,7 @@ CONTAINS
                   
           IF ( ABS(s) > 0 ) THEN
             s = SQRT( s) 
-            WRITE(Message,'(A,2ES12.3)') 'Normalizing Eigenvector with: ',REAL(s),AIMAG(s)
+            WRITE(Message,'(A,2ES12.3)') 'Normalizing Eigenvector '//TRIM(I2S(i))//' with: ',REAL(s),AIMAG(s)
             CALL Info('EigenSolve',Message,Level=12)
             EigVectors(i,:) = EigVectors(i,:) / s
           ELSE
@@ -671,7 +671,7 @@ CONTAINS
             CALL Info('EigenSolve','Eigenmode already normalized!',Level=12)              
           ELSE IF ( ABS(r) > 0 ) THEN            
             r = SQRT( r ) 
-            WRITE(Message,'(A,ES12.3)') 'Normalizing Eigenvector with: ',r
+            WRITE(Message,'(A,ES12.3)') 'Normalizing Eigenvector '//TRIM(I2S(i))//' with: ',r
             CALL Info('EigenSolve',Message,Level=12)
             EigVectors(i,:) = EigVectors(i,:) / r
           ELSE
