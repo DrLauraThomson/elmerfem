@@ -1,0 +1,112 @@
+\documentclass[]{article}
+
+%opening
+\title{Elmer/Ice Guide and Documentation}
+\author{LThomson}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Summary: 
+\end{abstract}
+
+\section{Installing Ubuntu on Windows 10}
+Documentation pulled from: \\
+https://itsfoss.com/install-ubuntu-1404-dual-boot-mode-windows-8-81-uefi/
+
+\subsection{Create Bootable live disk on USB}
+Follow instructions from: \\
+https://itsfoss.com/create-live-usb-of-ubuntu-in-windows/\\\\
+Download Ubuntu 16.04.3 LTS from: \\
+https://www.ubuntu.com/download/desktop\\\\
+Use Universal USB installer to install from:\\
+https://www.pendrivelinux.com/universal-usb-installer-easy-as-1-2-3/\\\\
+
+\subsection{Make a partition where Ubuntu will be installed}
+In "Control Panel" search "disk" to find "Create and format hard disk partitions"\\
+\\
+Navigate to C: drive, right click, and select shrink volume.\\
+Leave as is after running "Shrink" - free space will be used during Ubuntu install.
+
+\subsection{Disable fast startup}
+Control Panel > Hardware and Sounds > Power Options > System Settings > Choose what the power buttons do\\
+Uncheck the Turn on fast startup box
+
+\subsection{Disable secureboot in Windows 10 and 8.1}
+Follow this guide:\\
+https://www.windowspasswordsrecovery.com/win8-tips/how-to-disable-uefi-secure-boot-in-windows-8-1-8.html
+
+Open Windows settings: \\
+> Windows icon + I\\
+> Search for "Advanced startup"\\
+> Click "restart now" under advanced startup\\
+Wait a few minutes, then provided with choose an option screen. Select >Troubleshoot >Advanced Options\\
+>UEFI Firmware settings > Click Restart to change UEFI firmware settings\\\\
+
+When rebooted in UEFI utilities, navigate to >Secure Boot > SEcure Boot Enable and choose Disabled\\
+See that "This option enables or disables the Secure Boot feature. For Secure Boot to be enabled, the system needs to be in UEFI boot mode and the Enable Legacy Option ROMs option needs to be turned off.\\
+Interpret this as I should have Lecacy Support Option Enabled! So also navigate to:\\
+>General > Advanced Boot Options > Select "Enable Legacy Option ROMs"\\ \\
+
+>Exit
+
+\subsection{Installing Ubuntu along with Windows 10}
+Press Shift key while pressing restart\\
+Choose an Option > Use a device > USB storage device
+
+\subsection{Installing Ubuntu}
+Step 1: Select Language - English\\
+Step 2: Install 3rd party packages (for wifi and media players)\\
+Step 3: Installation type\\
+Choose fourth option "Something else" to create partition\\
+Select large (231666 MB) free space device option and click on the + sign.\\
+Create the Root partition, choose a size between 10-20 GB *e.g. 17000 MB.\\
+Size: 17000 MB\\
+Type for the new partition: Primary\\
+Location for the new partition: Beginning of this space\\
+Use as: Ext4journalling file system\\
+Mount point: / \\
+\\
+Do same to create swap partition; again click on the free space and + sign again. Suggested size is double of RAM (looking around online, it looks like others have alloted around 2-5 GB, but I have 63.9 GB RAM, so need 120 GB swap?). Follow from ubuntu help webpage and let swap = size of RAM, ~60 GB\\
+Size: 60000 MB\\
+Type for the new partition: Primary\\
+Location for the new partition: Beginning of this space\\
+Use as: swap area\\
+\\
+Finally create the Home directory; again click on the free space and + sign again. Suggested size is essentially the remainder of the room in the partition (for me 154667MB - around 155 GB)
+Size: 154667 MB\\
+Type for the new partition: Primary\\
+Location for the new partition: Beginning of this space\\
+Use as: Ext4journalling file system\\
+Mount point: /home\\
+\\
+Click "Install Now"\\
+\\
+Warming: The partition table format in use on your disks normally requires you to create a separate partition for boot loader code. This partition should be marked for use as a "reserved BIOS boot area" and should be at least 1 MB in size. Note that this is note the same as a partition mounted on /boot.
+
+If you do not go back to the partitioning menu and correct this error, boot loader installation may fail later, although it may still be possible to install the boot loader to a partion.\\
+\\
+Change /home size to 154000 allowing for 667 MB remaining in free space. Create a new partition with following details:\\
+Size: 1 MB\\
+Type for the new partition: Primary\\
+Location for the new partition: Beginning of this space\\
+Use as: Reserved BIOS boot area\\\\
+\\
+This partition appears as /dev/sda9 biosgrub\\
+\\
+Error no longer shows!\\
+\\
+Final message: If you continue, the changes listed below will be written to the disks. Otherwise you will be able to make further changes manually. The partition tables of the following devices are changed: ... etc.\\ \\
+Pick username: lthomson\\
+Password: sfu computing password\\
+\\
+\subsection{Troubleshooting}
+Still no luck getting grub menu to open at startup, read in Dell posting about UEFI settings and follow instructions on this link: http://www.dell.com/support/article/ca/en/cabsdt1/sln301754/how-to-install-ubuntu-and-a-recent-windows-operating-system-as-a-dual-boot-on-your-dell-pc?lang=en\\
+select /sda as main boot option at the bottom and try install again. This time "saving installed pacages process is taking a lot longer... take this as a good sign that it is installing?!
+
+
+
+
+\end{document}
